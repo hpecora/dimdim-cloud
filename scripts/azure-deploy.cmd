@@ -1,16 +1,24 @@
 @echo off
 
-echo ================================
-echo DIMDIM - DEPLOY AZURE
-echo ================================
+echo ==========================================
+echo DIMDIM - PROVISIONAMENTO E DEPLOY NO AZURE
+echo ==========================================
 
 set RESOURCE_GROUP=rg-dimdim
-set APP_NAME=dimdim-hpecora-556612
-set PLAN_NAME=plan-dimdim
 set LOCATION=brazilsouth
+set PLAN_NAME=plan-dimdim
+set APP_NAME=dimdim-hpecora-556612
+set SQL_SERVER=sql-dimdim-rm556612
+set DATABASE_NAME=dimdimdb
 
 echo.
-echo 1. Criando/validando App Service Plan...
+echo 1. Criando/validando Resource Group...
+az group create ^
+  --name %RESOURCE_GROUP% ^
+  --location %LOCATION%
+
+echo.
+echo 2. Criando/validando App Service Plan...
 az appservice plan create ^
   --name %PLAN_NAME% ^
   --resource-group %RESOURCE_GROUP% ^
@@ -19,7 +27,7 @@ az appservice plan create ^
   --is-linux
 
 echo.
-echo 2. Criando/validando Web App...
+echo 3. Criando/validando Web App...
 az webapp create ^
   --resource-group %RESOURCE_GROUP% ^
   --plan %PLAN_NAME% ^
@@ -27,18 +35,29 @@ az webapp create ^
   --runtime "JAVA:17-java17"
 
 echo.
-echo 3. Configurando Java 17...
+echo 4. Configurando Java 17...
 az webapp config set ^
   --resource-group %RESOURCE_GROUP% ^
   --name %APP_NAME% ^
   --linux-fx-version "JAVA|17-java17"
 
 echo.
-echo 4. Gerando o arquivo JAR...
+echo 5. Banco de dados utilizado:
+echo Servidor: %SQL_SERVER%
+echo Banco: %DATABASE_NAME%
+echo.
+echo O Azure SQL deve ser criado previamente com credenciais seguras.
+echo As credenciais reais NAO devem ficar neste script.
+echo Configure no App Service as variaveis:
+echo DB_USER
+echo DB_PASSWORD
+
+echo.
+echo 6. Gerando o arquivo JAR...
 call mvnw.cmd clean package -DskipTests
 
 echo.
-echo 5. Fazendo deploy no Azure...
+echo 7. Fazendo deploy no Azure...
 az webapp deploy ^
   --resource-group %RESOURCE_GROUP% ^
   --name %APP_NAME% ^
@@ -46,5 +65,13 @@ az webapp deploy ^
   --type jar
 
 echo.
-echo Deploy concluido.
+echo 8. Reiniciando o Web App...
+az webapp restart ^
+  --resource-group %RESOURCE_GROUP% ^
+  --name %APP_NAME%
+
+echo.
+echo ==========================================
+echo DEPLOY FINALIZADO
+echo ==========================================
 echo https://%APP_NAME%.azurewebsites.net
