@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Transação</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Transação</h1>
+
+    <form
+            th:action="@{/transacoes/salvar}"
+            th:object="${transacao}"
+            method="post">
+
+        <input
+                type="hidden"
+                th:field="*{id}">
+
+        <label>Descrição</label>
+
+        <input
+                type="text"
+                th:field="*{descricao}">
+
+        <span
+                class="erro"
+                th:errors="*{descricao}">
+        </span>
+
+        <label>Valor</label>
+
+        <input
+                type="number"
+                step="0.01"
+                th:field="*{valor}">
+
+        <span
+                class="erro"
+                th:errors="*{valor}">
+        </span>
+
+        <label>Data</label>
+
+        <input
+                type="date"
+                th:field="*{data}">
+
+        <span
+                class="erro"
+                th:errors="*{data}">
+        </span>
+
+        <label>Tipo</label>
+
+        <select th:field="*{tipo}">
+
+            <option value="">
+                Selecione
+            </option>
+
+            <option value="RECEITA">
+                Receita
+            </option>
+
+            <option value="DESPESA">
+                Despesa
+            </option>
+
+        </select>
+
+        <span
+                class="erro"
+                th:errors="*{tipo}">
+        </span>
+
+        <label>Categoria</label>
+
+        <select th:field="*{categoria.id}">
+
+            <option value="">
+                Selecione
+            </option>
+
+            <option
+                    th:each="categoria : ${categorias}"
+                    th:value="${categoria.id}"
+                    th:text="${categoria.nome}">
+            </option>
+
+        </select>
+
+        <span
+                class="erro"
+                th:errors="*{categoria}">
+        </span>
+
+        <button type="submit">
+            Salvar
+        </button>
+
+        <a href="/transacoes">
+            Cancelar
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>

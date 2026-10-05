@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Categoria</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Categoria</h1>
+
+    <form
+            th:action="@{/categorias/salvar}"
+            th:object="${categoria}"
+            method="post">
+
+        <input
+                type="hidden"
+                th:field="*{id}">
+
+        <label>Nome</label>
+
+        <input
+                type="text"
+                th:field="*{nome}">
+
+        <span
+                class="erro"
+                th:errors="*{nome}">
+        </span>
+
+        <label>Descrição</label>
+
+        <textarea
+                th:field="*{descricao}">
+        </textarea>
+
+        <button type="submit">
+            Salvar
+        </button>
+
+        <a href="/categorias">
+            Cancelar
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
