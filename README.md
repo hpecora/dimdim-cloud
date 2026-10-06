@@ -418,6 +418,6 @@ https://dimdim-hpecora-556612.azurewebsites.net
 https://github.com/hpecora/dimdim-cloud
 ```
 
-## Vídeo de evidências
+## Vídeo de demonstração
 
-O link do vídeo de demonstração será disponibilizado aqui após a gravação final.
+https://youtu.be/v0vuagtHx1k?si=7nbKlYE_2QlhvJVX
